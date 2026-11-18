@@ -1,126 +1,171 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Library Management System
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A full-stack Library Management System developed as part of the Power Learn Project (PLP) Software Engineering program.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+The application is designed to simplify library operations by providing functionality for managing books, organising genres, handling user accounts, managing reading lists, tracking borrowing requests and booking study spaces.
 
-## Description
+## Technology Stack
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+**Backend**
 
-## Project setup
+- [NestJS](https://nestjs.com/) – Node.js backend framework.
+- [TypeScript](https://www.typescriptlang.org/) – Programming language.
+- [Prisma ORM](https://www.prisma.io/) – Database access and management.
+- [PostgreSQL](https://www.postgresql.org/) – Relational database.
 
-```bash
-$ npm install
+**Frontend (planned)**
+
+- [React](https://react.dev/) – User interface development.
+
+## Project Structure
+
+```text
+library-management-system/
+├── prisma/
+│   ├── migrations/
+│   ├── schema.prisma
+│   └── seed.ts
+├── src/
+│   ├── prisma/
+│   │   ├── prisma.module.ts
+│   │   └── prisma.service.ts
+│   ├── app.module.ts
+│   └── main.ts
+├── test/
+├── .env.example
+├── package.json
+└── README.md
 ```
 
-## Compile and run the project
+## Database Schema
+
+The database is designed using Prisma ORM and PostgreSQL.
+
+The initial database schema consists of three core models:
+
+- **User:** Stores user information and their assigned roles.
+- **Genre:** Stores book categories and genre information.
+- **Book:** Stores book details and references its associated genre.
+
+### Schema Decisions
+
+The Book model references the Genre model through a foreign key called `genreId` rather than embedding genre information directly inside each Book record.
+
+This design follows relational database principles and establishes a one-to-many relationship between Genre and Book. One genre can be associated with multiple books, while each book belongs to one genre.
+
+Separating genres into their own model avoids unnecessary duplication of genre information, improves data consistency and makes it easier to manage and update book categories independently.
+
+The relationship is implemented in Prisma using `@relation`, with `genreId` referencing the primary key of the Genre model.
+
+The User model uses a Role enum with two possible values:
+
+- `PATRON` – Represents a regular library user.
+- `LIBRARIAN` – Represents a library administrator responsible for managing library resources.
+
+Using an enum ensures that user roles are restricted to predefined values and provides a foundation for role-based access control.
+
+## Database Seeding
+
+The Prisma seed script populates the database with initial data for development and testing.
+
+It includes:
+
+- At least four book genres.
+- Sixteen sample books distributed across the genres.
+- Sample user records.
+
+The seed script uses upsert operations to avoid unnecessary duplicate records when it is executed repeatedly.
+
+## Getting Started
+
+### Prerequisites
+
+Ensure you have the following installed:
+
+- Node.js
+- npm
+- PostgreSQL database
+- Git
+
+### Installation
+
+Clone the repository:
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+git clone https://github.com/Abdijabir21Ali/library-management-system.git
 ```
 
-## Run tests
+Navigate to the API project directory (if the repository uses an `api/` subdirectory):
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+cd library-management-system/api
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+Install dependencies:
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+npm install
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### Environment Configuration
 
-## Observability
+Create a `.env` file using `.env.example` as a reference.
 
-In production applications, observability is essential for understanding how your system behaves, detecting issues early, and maintaining reliable performance.
+Configure your PostgreSQL database connection:
 
-[NestJS Observe](https://observe.nestjs.com) automatically instruments your NestJS application, giving you deep visibility into your system with minimal setup:
+```env
+DATABASE_URL="your_postgresql_connection_string"
+```
 
-- **Distributed tracing:** Follow requests across services and understand how they flow through your system.
-- **Waterfall analysis:** Visualize request execution and identify slow operations, bottlenecks, and unexpected delays.
-- **Performance analysis:** Analyze application performance in real time and quickly pinpoint areas that need optimization.
-- **Metrics:** Track key application and infrastructure metrics to understand system health and performance trends.
-- **Logging:** Centralize and correlate logs with traces and other telemetry to make debugging easier.
-- **Error tracking:** Detect errors quickly and investigate their root causes with the surrounding context.
-- **SLA monitoring:** Track service-level objectives and identify when your application is approaching or exceeding defined thresholds.
-- **Alarms and alerts:** Set up alerts for critical errors, performance degradation, SLA violations, and other anomalies so your team can react quickly.
+Do not commit your actual `.env` file or database credentials to GitHub.
 
-This project is already instrumented. To connect it, run this and approve the code it prints at [observe.nestjs.com/link](https://observe.nestjs.com/link) - signing up for free if you have no account:
+### Database Migration
+
+Apply the Prisma migrations:
 
 ```bash
-$ npx @nestjs/observe link
+npx prisma migrate dev
 ```
 
-It writes the app key and secret into `.env` and makes every `nest start` script (`start`, `start:dev`, `start:debug`) load it. In production, set `OBSERVE_APP_KEY` and `OBSERVE_APP_SECRET` in the environment instead.
+### Seed the Database
 
-Or do it by hand: create an application and an API key at [observe.nestjs.com](https://observe.nestjs.com), and set the pair as `OBSERVE_APP_KEY` and `OBSERVE_APP_SECRET` in the environment the app runs in.
+Populate the database:
 
-The free plan needs no payment details and covers 300,000 events a month. You can also browse the [live demo](https://www.observe-demo.nestjs.com/dashboard) first - the whole dashboard over a busy service's data, with nothing to install.
+```bash
+npx prisma db seed
+```
 
-## Resources
+### Run the Application
 
-Check out a few resources that may come in handy when working with NestJS:
+Development mode:
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Auto-instrument your application with [NestJS Observe](https://observe.nestjs.com). Distributed tracing, metrics, and logging made easy. Error tracking and performance monitoring for your NestJS applications.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+```bash
+npm run start:dev
+```
 
-## Support
+Production mode:
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```bash
+npm run start:prod
+```
 
-## Stay in touch
+### Run Tests
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+```bash
+npm run test
+```
+
+## Development Roadmap
+
+The project is being developed progressively through the following stages:
+
+- **Week 1:** Database foundations, Prisma modelling, PostgreSQL integration and initial data seeding.
+- **Week 2:** Backend CRUD operations, validation, authentication and role-based authorisation.
+- **Week 3:** React book catalogue, search and book display.
+- **Week 4:** Reading list management and study space booking interface.
+- **Week 5:** Borrow request tracking, booking transactions and administrative functionality.
+- **Week 6:** Testing, integration and deployment.
 
 ## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+This project is developed for educational purposes as part of the Power Learn Project Software Engineering program.
