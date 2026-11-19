@@ -1,5 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
+import * as bcrypt from 'bcrypt';
 
 const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
@@ -59,21 +60,26 @@ async function main() {
     }
   }
 
+  const hashedLibrarianPassword = await bcrypt.hash('password123', 10);
   await prisma.user.upsert({
     where: { email: 'librarian@library.test' },
     update: {},
     create: {
       email: 'librarian@library.test',
       name: 'Head Librarian',
+      password: hashedLibrarianPassword,
       role: 'LIBRARIAN',
     },
   });
+
+  const hashedPatronPassword = await bcrypt.hash('password123', 10);
   await prisma.user.upsert({
     where: { email: 'patron@library.test' },
     update: {},
     create: {
       email: 'patron@library.test',
       name: 'Test Patron',
+      password: hashedPatronPassword,
       role: 'PATRON',
     },
   });

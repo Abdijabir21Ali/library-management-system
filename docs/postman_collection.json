@@ -1,0 +1,97 @@
+{
+  "info": {
+    "name": "Library Management System",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register Patron",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\": \"newpatron@test.com\", \"name\": \"John Doe\", \"password\": \"password123\", \"role\": \"PATRON\"}"
+            },
+            "url": {"raw": "http://localhost:3000/auth/register", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["auth", "register"]}
+          }
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"email\": \"librarian@library.test\", \"password\": \"password123\"}"
+            },
+            "url": {"raw": "http://localhost:3000/auth/login", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["auth", "login"]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "Genres",
+      "item": [
+        {
+          "name": "Create Genre",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}],
+            "body": {"mode": "raw", "raw": "{\"name\": \"Mystery\", \"slug\": \"mystery\"}"},
+            "url": {"raw": "http://localhost:3000/genres", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["genres"]}
+          }
+        },
+        {
+          "name": "Get All Genres",
+          "request": {
+            "method": "GET",
+            "url": {"raw": "http://localhost:3000/genres", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["genres"]}
+          }
+        }
+      ]
+    },
+    {
+      "name": "Books",
+      "item": [
+        {
+          "name": "Create Book (Librarian)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Content-Type", "value": "application/json"},
+              {"key": "Authorization", "value": "Bearer YOUR_TOKEN_HERE"}
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\": \"The Great Gatsby\", \"author\": \"F. Scott Fitzgerald\", \"isbn\": \"978-0743273565\", \"totalCopies\": 5, \"genreId\": 1}"
+            },
+            "url": {"raw": "http://localhost:3000/books", "protocol": "http", "host": ["localhost"], "port": "3000", "path": ["books"]}
+          }
+        },
+        {
+          "name": "Get Books (Filter/Search/Page)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "http://localhost:3000/books?genreId=1&search=gatsby&page=1&limit=10",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "3000",
+              "path": ["books"],
+              "query": [
+                {"key": "genreId", "value": "1"},
+                {"key": "search", "value": "gatsby"},
+                {"key": "page", "value": "1"},
+                {"key": "limit", "value": "10"}
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

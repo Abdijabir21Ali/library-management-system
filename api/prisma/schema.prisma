@@ -12,10 +12,11 @@ enum Role {
 }
 
 model User {
-  id    Int    @id @default(autoincrement())
-  email String @unique
-  name  String
-  role  Role   @default(PATRON)
+  id       Int    @id @default(autoincrement())
+  email    String @unique
+  name     String
+  password String
+  role     Role   @default(PATRON)
 }
 
 model Genre {
